@@ -15,4 +15,13 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+    <!-- Declare the missing lStar attribute
+    
+    
+    <declare-styleable name="CustomTheme">
+        <attr name="android:lStar" format="float" />
+    </declare-styleable>
+    
+     -->
 </resources>

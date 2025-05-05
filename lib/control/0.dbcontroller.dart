@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:studytools/model/sqldb.dart';
+  import 'dart:io';
 
 class DbController extends GetxController {
   SqlDb db = SqlDb();
@@ -342,4 +343,33 @@ class DbController extends GetxController {
     values('$packageName')''');
     selectMonitoredApps();
   }
+
+
+  ///////////////////////////// Files DB ////////////////////////////////
+
+Future<void> deleteFile(String filePath) async {
+  final file = File(filePath);
+
+  if (await file.exists()) {
+    await file.delete();
+    print('File deleted successfully.');
+  } else {
+    print('File does not exist.');
+  }
+
+
+//   try {
+//   final file = File(filePath);
+//   if (await file.exists()) {
+//     await file.delete();
+//     print('File deleted.');
+//   } else {
+//     print('No file found.');
+//   }
+// } catch (e) {
+//   print('Error deleting file: $e');
+// }
+// ALSO ask the user if he really wants to
+}
+
 }

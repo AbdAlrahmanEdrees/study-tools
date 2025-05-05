@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/control/2.homecontroller.dart';
 import 'package:studytools/view/1.wordboost/2.stories_list_page.dart';
+import 'package:studytools/view/1.wordboost/7.receive_intent_page.dart';
 import 'package:studytools/view/3.select_apps_to_monitor_page.dart';
 
 class ReviewPage extends GetView<HomeController> {
@@ -58,20 +59,85 @@ class ReviewPage extends GetView<HomeController> {
                 ),
               ),
             ),
+            // SizedBox(),
+            // SizedBox(
+            //   width: context.width / 1.2,
+            //   height: context.height / 10,
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       dbController.changeLanguage('german');
+            //       Get.to(StoriesListPage());
+            //     },
+            //     style: ButtonStyle(
+            //         backgroundColor: WidgetStatePropertyAll(Colors.grey),
+            //         shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(7)))),
+            //     child: Text(
+            //       "Learn German",
+            //       style: TextStyle(fontSize: 35, color: Colors.deepOrange),
+            //     ),
+            //   ),
+            // ),
             SizedBox(),
-            ElevatedButton(
+            SizedBox(
+              width: context.width / 1.1,
+              height: context.height / 20,
+              child: ElevatedButton(
                 onPressed: () {
+                  dbController.changeLanguage('german');
                   Get.to(SelectAppsToMonitor());
                 },
-                child: Text("Add Apps To Monitor")),
-                ElevatedButton(onPressed: ()async{
-                  await FlutterOverlayWindow.showOverlay(
-            overlayTitle: "Overlay",
-            overlayContent: "Monitoring App",
-            enableDrag: true,
-            flag: OverlayFlag.focusPointer
-          );
-                }, child: Text("show overlay window"))
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.grey),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7)))),
+                child: Text(
+                  "Add Apps To Monitor",
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              ),
+            ),
+            // SizedBox(),
+            SizedBox(
+              width: context.width / 1.1,
+              height: context.height / 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  () async {
+                    await FlutterOverlayWindow.showOverlay(
+                        overlayTitle: "Overlay",
+                        overlayContent: "Monitoring App",
+                        enableDrag: true,
+                        flag: OverlayFlag.focusPointer);
+                  };
+                },
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.grey),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7)))),
+                child: Text(
+                  "Show Overlay Window",
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: context.width / 1.1,
+              height: context.height / 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.to(ReceiveSharingIntentPage());
+                },
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.grey),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7)))),
+                child: Text(
+                  "Receive sharing intent page",
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              ),
+            ),
             // SizedBox(
             //   width: context.width / 1.2,
             //   height: context.height / 10,

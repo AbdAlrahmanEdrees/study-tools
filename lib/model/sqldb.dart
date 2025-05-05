@@ -28,7 +28,7 @@ class SqlDb {
         await getDatabasesPath(); //path of the db on ur device
     String path = join(databasepath, 'studytools.db'); //naming our db
     Database studytoolsdb = await openDatabase(path,
-        onCreate: _onCreate, version: 11, onUpgrade: _onUpgrade);
+        onCreate: _onCreate, version: 1, onUpgrade: _onUpgrade);
     //creating our db
     //version==1 means: just created, still never updated
     //when version==1: onCreate will be called (it get called only once)
@@ -96,6 +96,15 @@ class SqlDb {
       CREATE TABLE monitored_apps(
       package_name TEXT)''');
 
+      
+    await db.execute('''
+      CREATE TABLE snaps(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      no_of_reviews INTEGER NOT NULL,
+      last_review_date DATE NOT NULL,
+      next_review_date DATE NOT NULL,
+      snap TEXT NOT NULL)''');
+
     ///// add default rows:
 
     await db.execute('''
@@ -162,10 +171,18 @@ Anna: Mein Tag w')
   }
 
   _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    await db.execute('''
-      CREATE TABLE monitored_apps(
-      package_name TEXT)''');
+    // await db.execute('''
+    //   CREATE TABLE monitored_apps(
+    //   package_name TEXT)''');
     // await db.execute('''DROP TABLE monitored_apps''');
+     
+    await db.execute('''
+      CREATE TABLE snaps(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      no_of_reviews INTEGER NOT NULL,
+      last_review_date DATE NOT NULL,
+      next_review_date DATE NOT NULL,
+      snap TEXT NOT NULL)''');
     print("======DB has been upgraded=======");
   }
 

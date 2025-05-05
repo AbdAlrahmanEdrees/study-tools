@@ -4,6 +4,10 @@
 
      <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
      <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+     <!--To prevent Android from stopping your service-->
+
+
      <!--<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />-->
      <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -12,15 +16,24 @@
      <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+        <!-- for Android 11+-->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:label="Graduation Study Tools"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <service
-            android:name="id.flutter.flutter_background_service.BackgroundService"
-            tools:replace="android:exported"
-            android:exported="true" />
+        android:name="id.flutter.flutter_background_service.BackgroundService"
+        android:foregroundServiceType="specialUse"
+        android:enabled="true"
+        android:exported="false"
+        tools:replace="android:exported">
+        </service>
+        <!-- You might want to use "specialUse" or "systemExempted" for the foregroundServiceType since your service requires continuous operation and exemption from battery optimizations.
+        -->
+
         <!-- This tells the build system to override the 'exported' attribute as required.-->
 
         <service android:name="flutter.overlay.window.flutter_overlay_window.OverlayService" 
@@ -29,6 +42,8 @@
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="explanation_for_special_use"/>
         </service>
+            <!-- to receive sharing intent properly, we changed launchMode from "singleTop" to "singleTask"
+            it insures that our app does not create multiple instances of the same activity-->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -38,6 +53,9 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            
+            <!-- it was :      android:launchMode="singleTask" 
+            I made it      android:launchMode="singleTop"    -->
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -51,7 +69,32 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <!--TODO:  Add this filter, if you want support opening urls into your app-->
+            <intent-filter>
+               <action android:name="android.intent.action.VIEW" />
+               <category android:name="android.intent.category.DEFAULT" />
+               <category android:name="android.intent.category.BROWSABLE" />
+               <data
+                   android:scheme="https"
+                   android:host="example.com"
+                   android:pathPrefix="/invite"/>
+            </intent-filter>
 
+            <!--TODO:  Add this filter, if you want support opening files into your app-->
+            <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <data
+                   android:mimeType="*/*"
+                   android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- Make Your application able to receive any type of files, and also
+            receive multiple files at once -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -62,8 +105,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>
-            <!-- Make Your application able to receive any type of files, and also
-            receive multiple files at once -->
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

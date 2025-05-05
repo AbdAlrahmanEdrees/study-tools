@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized(); // Needed to access plugins
-  DbController _dbController=Get.put(DbController());
+  DbController _dbController=Get.find<DbController>();
   service.on('stopService').listen((event) {
     service.stopSelf();
   });

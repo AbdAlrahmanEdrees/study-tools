@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studytools/control/permissions/2.permissions_page_controller.dart';
+import 'package:studytools/control/4.drawer/1.select_apps_page_controller.dart';
 
 class SelectAppsToMonitor extends StatelessWidget {
-  const SelectAppsToMonitor({Key? key}) : super(key: key);
+  const SelectAppsToMonitor({super.key});
 
   @override
   Widget build(BuildContext context) {

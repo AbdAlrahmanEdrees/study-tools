@@ -7,6 +7,9 @@
      <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
      <!--To prevent Android from stopping your service-->
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- to know when the phone finished booting to start our background_service -->
+
 
      <!--<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />-->
      <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -25,12 +28,16 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <service
-        android:name="id.flutter.flutter_background_service.BackgroundService"
-        android:foregroundServiceType="specialUse"
-        android:enabled="true"
-        android:exported="false"
-        tools:replace="android:exported">
+            android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:foregroundServiceType="specialUse"
+            android:enabled="true"
+            android:exported="false"
+            tools:replace="android:exported">
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter> -->
         </service>
+
         <!-- You might want to use "specialUse" or "systemExempted" for the foregroundServiceType since your service requires continuous operation and exemption from battery optimizations.
         -->
 

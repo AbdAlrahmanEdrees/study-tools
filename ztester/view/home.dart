@@ -4,7 +4,7 @@ import 'package:tester/view/select_apps_to_monitor.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {

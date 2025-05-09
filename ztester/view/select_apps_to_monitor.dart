@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:tester/controller/2.permissions_page_controller.dart';
 
 class SelectAppsToMonitor extends StatelessWidget {
-  const SelectAppsToMonitor({Key? key}) : super(key: key);
+  const SelectAppsToMonitor({super.key});
 
   @override
   Widget build(BuildContext context) {

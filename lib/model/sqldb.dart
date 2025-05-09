@@ -176,13 +176,13 @@ Anna: Mein Tag w')
     //   package_name TEXT)''');
     // await db.execute('''DROP TABLE monitored_apps''');
      
-    await db.execute('''
-      CREATE TABLE snaps(
-      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      no_of_reviews INTEGER NOT NULL,
-      last_review_date DATE NOT NULL,
-      next_review_date DATE NOT NULL,
-      snap TEXT NOT NULL)''');
+    // await db.execute('''
+    //   CREATE TABLE snaps(
+    //   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    //   no_of_reviews INTEGER NOT NULL,
+    //   last_review_date DATE NOT NULL,
+    //   next_review_date DATE NOT NULL,
+    //   snap TEXT NOT NULL)''');
     print("======DB has been upgraded=======");
   }
 

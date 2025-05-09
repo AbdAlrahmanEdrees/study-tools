@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studytools/control/permissions/1.permissions_controller.dart';
+import 'package:studytools/control/0.permissions/1.permissions_controller.dart';
 
 class PermissionsPage extends StatelessWidget {
   final PermissionsScreenController controller =

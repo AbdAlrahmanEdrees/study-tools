@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
-import 'package:studytools/control/2.homecontroller.dart';
+import 'package:studytools/control/1.homecontroller.dart';
 import 'package:studytools/view/1.wordboost/2.stories_list_page.dart';
 import 'package:studytools/view/1.wordboost/7.receive_intent_page.dart';
 import 'package:studytools/view/3.select_apps_to_monitor_page.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
-import 'package:get/get.dart';
 
 class OverlayWidget extends StatelessWidget {
   const OverlayWidget({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studytools/control/receive_sharing_intent/receive_intent_controller.dart';
+import 'package:studytools/control/3.monitoring/3.receive_intent_controller.dart';
 import 'package:studytools/model/appcolors.dart';
 
 class ReceiveSharingIntentPage extends StatelessWidget {

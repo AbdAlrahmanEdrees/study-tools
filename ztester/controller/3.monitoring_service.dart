@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized(); // Needed to access plugins
-  DbController _dbController=Get.put(DbController());
+  DbController dbController=Get.put(DbController());
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
@@ -28,8 +28,8 @@ Future<void> onStart(ServiceInstance service) async {
       print("Hello each 2 secondsssssss \n");
       String? pkg = await getCurrentForegroundAppPackageName();
       print(pkg);
-      if(pkg!=null && !(await FlutterOverlayWindow.isActive())) {
-        if(_dbController.monitoredApps
+      if(!(await FlutterOverlayWindow.isActive())) {
+        if(dbController.monitoredApps
         .any((app) => app["package_name"] == pkg)){
           await FlutterOverlayWindow.showOverlay(
             overlayTitle: "Overlay",

@@ -42,7 +42,7 @@ class PermissionsScreenController extends GetxController {
     hasManageExternalStoragePermission.value = externalStorage;
     if (overlay && usage && storage && externalStorage) {
       Future.delayed(const Duration(milliseconds: 2000), () {
-        Get.offAll(() => const HomePage());
+        Get.offAll(() =>  HomePage());
       });
     }
   }

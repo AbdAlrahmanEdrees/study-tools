@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:studytools/control/1.homecontroller.dart';
+import 'package:studytools/model/appcolors.dart';
+import 'package:studytools/view/3.select_apps_to_monitor_page.dart';
 
 class HomeDrawer extends StatelessWidget {
   HomeDrawer({super.key});
@@ -9,12 +11,20 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Drawer(
+      backgroundColor: AppColors.red3,
       child: Column(
         children: [
+          SizedBox(height: screenHeight / 25),
           SizedBox(
-            height: screenHeight / 5,
+              height: screenHeight / 6,
+              width: 500,
+              child: Image.asset(
+                'assets/images/app_logo.png',
+              )),
+          SizedBox(
+            height: screenHeight / 25,
           ),
           GestureDetector(
               onTap: controller.toggleBackGroundServiceSlider,
@@ -25,15 +35,12 @@ class HomeDrawer extends StatelessWidget {
                 ),
                 trailing: Obx(() => _animatedSlider(controller)),
               )),
+          SizedBox(height: screenHeight/20,),
           ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text(" Add New Hobby "),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.favorite),
-            title: const Text(" Favorite Hobbies "),
-            onTap: () {},
+            leading: const Icon(Icons.apps),
+            title: const Text(" Add Apps to Monitor "),
+            onTap: () {
+                  Get.to(SelectAppsToMonitor());},
           ),
           const Expanded(child: SizedBox()),
           ListTile(

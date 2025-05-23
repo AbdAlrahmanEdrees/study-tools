@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/model/appcolors.dart';
-import 'package:studytools/view/1.wordboost/widgets/1.quiz_buttons_page.dart';
-import 'package:studytools/view/1.wordboost/widgets/2.quiz_statistics_page.dart';
+import 'package:studytools/view/1.review/widgets/1.quiz_buttons_page.dart';
+import 'package:studytools/view/1.review/widgets/2.quiz_statistics_page.dart';
 
 //NOTE: you will see en and ar with variables names, while the same variables also
 //serve the german quiz, that's because we first created only for english-arabic words quizzes

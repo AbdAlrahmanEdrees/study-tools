@@ -3,12 +3,13 @@ import 'package:studytools/control/1.homecontroller.dart';
 import 'package:studytools/model/appcolors.dart';
 import 'package:get/get.dart';
 import 'package:studytools/view/0.widgets/2.home_page_drawer.dart';
-import 'package:studytools/view/1.wordboost/1.wordboostpage.dart';
+import 'package:studytools/view/1.review/1.review_page.dart';
 import 'package:studytools/view/2.pomodoro/1.pomodoropage.dart';
 import 'package:studytools/view/3.stats/1.statspage.dart';
 
 class HomePage extends GetView<HomeController> {
   HomePage({super.key});
+  @override
   final HomeController controller = Get.put(HomeController());
   final List<Widget> pages = [StatsPage(), ReviewPage(), PomodoroPage()];
   @override

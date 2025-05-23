@@ -1,16 +1,15 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/control/1.review/1.translator_controller.dart';
+import 'package:studytools/control/3.monitoring/1.flutter_background_service_utils.dart';
 import 'package:studytools/view/1.homepage.dart';
 import 'package:studytools/view/2.permissionspage.dart';
 import 'package:studytools/view/0.widgets/1.overlay_widget.dart';
 import 'package:usage_stats/usage_stats.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 
 // import 'package:studytools/view/1.wordboost/widgets/overlay_translator.dart';
 
@@ -19,8 +18,10 @@ void main() async {
   //without the previous line in the beginning, the app will not run, only a black screen
   //will show up, but after I just added this line, the app ran, first a window appeared
   //asking for 'overlay over apps' permission' :) and everything was perfectly fine.
-  Get.put(DbController(),permanent: true);//permenant:true <=> stays in memory
-  // Get.put(TranslationController());
+  // The Right Way to Make One Instance Of A Controller:
+  final DbController db = Get.put(DbController(),
+      permanent: true); //permenant:true <=> stays in memory
+  Get.put(TranslationController(db), permanent: true);
 
   //initializing the SQFlite Db
   // SqlDb sqlDb = SqlDb();
@@ -64,7 +65,7 @@ void main() async {
   runApp(GetMaterialApp(
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
-      home: permissionsAailable ?  HomePage() : PermissionsPage()));
+      home: permissionsAailable ? HomePage() : PermissionsPage()));
 }
 //}
 
@@ -72,50 +73,14 @@ void main() async {
 @pragma("vm:entry-point")
 void overlayMain() {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(TranslationController());
+  //It is an isolate, it is isolated from other threads, so it needs its own 
+  // dbController and other controllers.
+  final DbController db = Get.put(DbController(),
+      permanent: true); //permenant:true <=> stays in memory
+  Get.put(TranslationController(db), permanent: true);
   runApp(GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Material(
-
           // child: Container(color: Colors.red, child: Text("My overlay")))));
           child: OverlayWidget())));
-}
-
-
-Future<void> initializeBackGroundService() async {
-  final service = FlutterBackgroundService();
-  await service.configure(
-      iosConfiguration: IosConfiguration(),
-      androidConfiguration: AndroidConfiguration(
-          onStart: onStart, isForegroundMode: true, autoStartOnBoot: true));
-
-  service.startService();
-}
-
-@pragma('vm:entry-point')
-void onStart(ServiceInstance service) async {
-  //We will be setting up listerns over here to talk to the Native Android side.
-  // Make the service background/foreground and start/stop the service.
-  if (service is AndroidServiceInstance) {
-    service.on('setAsForeground').listen((event) {
-      service.setAsForegroundService();
-    });
-
-    service.on('setAsBackground').listen((event) {
-      service.setAsBackgroundService();
-    });
-  }
-
-  service.on('stopService').listen((event) {
-    service.stopSelf();
-  });
-
-  Timer.periodic(const Duration(seconds: 2), (timer) {
-    if (service is AndroidServiceInstance) {
-      //if you don't' assign constum notification, comment this
-      service.setForegroundNotificationInfo(
-          title: "My notification", content: "Updated at ${DateTime.now()}");
-      debugPrint("Hi");
-    }
-  });
 }

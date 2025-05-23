@@ -92,6 +92,7 @@ class SqlDb {
       short_break_duration INTEGER,
       long_break_duration INTEGER,
       type_of_clock TEXT)''');
+      
     await db.execute('''
       CREATE TABLE monitored_apps(
       package_name TEXT)''');

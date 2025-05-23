@@ -13,9 +13,11 @@ import 'package:studytools/model/appcolors.dart';
 // import 'package:studytools/model/appcolors.dart';
 
 class TranslationController extends GetxController {
+  final DbController dbController;
+  TranslationController(this.dbController);
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
-  DbController dbController = Get.put(DbController());
+  // final DbController dbController = Get.find();
   String word = "input";
   String translation = "translation";
   RxString sourceLanguage = "english".obs;
@@ -198,7 +200,7 @@ class TranslationController extends GetxController {
                   GetBuilder<TranslationController>(
                     //to be able to update the new translation when
                     //the user changes the first TextField
-                    init: TranslationController(),
+                    //init: TranslationController(),
                     builder: (controller) => TextField(
                       style: TextStyle(color: AppColors.dark),
                       controller: controller2,
@@ -222,7 +224,9 @@ class TranslationController extends GetxController {
                               child: Text("German")),
                         )
                       ]),
-                   SizedBox(height: context.height/30,),
+                  SizedBox(
+                    height: context.height / 30,
+                  ),
                   Row(
                     children: [
                       Obx(() => Expanded(
@@ -231,16 +235,16 @@ class TranslationController extends GetxController {
                               style: TextStyle(color: AppColors.dark),
                             ),
                           )),
-                  Expanded(
-                    child: MaterialButton(
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        dbController.addWord(
-                            controller1.text, controller2.text, storyId);
-                      },
-                      child: const Text("Save"),
-                    ),
-                  ),
+                      Expanded(
+                        child: MaterialButton(
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            dbController.addWord(
+                                controller1.text, controller2.text, storyId);
+                          },
+                          child: const Text("Save"),
+                        ),
+                      ),
                     ],
                   ),
                   // MaterialButton(

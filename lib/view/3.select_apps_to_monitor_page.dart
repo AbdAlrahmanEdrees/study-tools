@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/4.drawer/1.select_apps_page_controller.dart';
+import 'package:studytools/model/appcolors.dart';
 
 class SelectAppsToMonitor extends StatelessWidget {
   const SelectAppsToMonitor({super.key});
@@ -12,12 +13,15 @@ class SelectAppsToMonitor extends StatelessWidget {
       builder: (controller) {
         if (controller.apps.isEmpty) {
           return const Scaffold(
+            backgroundColor: AppColors.red4,
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
         return Scaffold(
+          backgroundColor: AppColors.red3,
           appBar: AppBar(
+            backgroundColor: AppColors.red1,
             title: const Text('Select Apps to Monitor'),
             centerTitle: true,
           ),

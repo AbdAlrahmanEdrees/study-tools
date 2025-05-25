@@ -36,6 +36,7 @@ class HomeDrawer extends StatelessWidget {
                 trailing: Obx(() => _animatedSlider(controller)),
               )),
           SizedBox(height: screenHeight/20,),
+          // Obx(()=>Checkbox(value: value, onChanged: onChanged)),
           ListTile(
             leading: const Icon(Icons.apps),
             title: const Text(" Add Apps to Monitor "),

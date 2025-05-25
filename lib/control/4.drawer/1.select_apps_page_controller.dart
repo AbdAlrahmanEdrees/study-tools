@@ -1,3 +1,4 @@
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:get/get.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:installed_apps/app_info.dart';
@@ -7,6 +8,11 @@ class PermissionsPageController extends GetxController {
   RxList<AppInfo> apps = <AppInfo>[].obs;
   // RxList<String> selectedApps = <String>[].obs;
   final DbController _dbController = Get.put(DbController());
+
+  final service = FlutterBackgroundService();
+  //We need this to talk to the isolate of the background service,
+  // to tell it to refresh its 'selected_apps' list to keep it up to date
+  // /to keep it synchronized with the main thread.
   @override
   void onInit() {
     super.onInit();
@@ -30,10 +36,9 @@ class PermissionsPageController extends GetxController {
     } else {
       await _dbController.addMonitoredApp(packageName);
     }
-    // Future.delayed(Duration(seconds: 2), () {
-    //   print(_dbController.monitoredApps);
-    //   update();
-    // });
+
+    //telling the background service isolate to refresh its db instance
+    service.invoke('refresh_selected_apps');
   }
 
   bool isSelected(String packageName) {

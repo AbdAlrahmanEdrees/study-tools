@@ -4,8 +4,15 @@ import 'package:get/get.dart';
 
 class OverlayWindowController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  late final AnimationController animationController;
-  late final Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  final animationIsRunning = true.obs;
+
+  void triggerOverlay() {
+    animationIsRunning.value = !animationIsRunning.value;
+    animationController.reset();
+    animationController.forward();
+  }
 
   @override
   void onInit() {
@@ -16,8 +23,9 @@ class OverlayWindowController extends GetxController
       duration: const Duration(seconds: 15),
     )..addStatusListener((status) async {
         if (status == AnimationStatus.completed) {
-          await FlutterOverlayWindow.closeOverlay();
-        }
+          animationIsRunning.value = false;
+          update();
+        } 
       });
 
     animation = CurvedAnimation(
@@ -25,7 +33,16 @@ class OverlayWindowController extends GetxController
       curve: Curves.linear,
     );
 
-    animationController.forward();
+    FlutterOverlayWindow.overlayListener.listen(
+      (event) {
+        if (event is String) {
+          if (event == 'reset_animation') {
+            animationController.reset();
+            animationController.forward();
+          }
+        }
+      },
+    );
   }
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
@@ -73,14 +72,14 @@ void main() async {
 @pragma("vm:entry-point")
 void overlayMain() {
   WidgetsFlutterBinding.ensureInitialized();
-  //It is an isolate, it is isolated from other threads, so it needs its own 
+  //It is an isolate, it is isolated from other threads, so it needs its own
   // dbController and other controllers.
   final DbController db = Get.put(DbController(),
       permanent: true); //permenant:true <=> stays in memory
   Get.put(TranslationController(db), permanent: true);
-  runApp(GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Material(
-          // child: Container(color: Colors.red, child: Text("My overlay")))));
-          child: OverlayWidget())));
+  runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: OverlayWindow()
+      // Material(
+      //     // child: Container(color: Colors.red, child: Text("My overlay")))));
+      //     child: OverlayWindow()
+      ));
 }

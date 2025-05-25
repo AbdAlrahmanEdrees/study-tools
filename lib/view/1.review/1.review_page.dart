@@ -65,17 +65,17 @@ class ReviewPage extends GetView<HomeController> {
                 },
               ),
               const SizedBox(height: 30),
-            //   _buildLanguageCard(
-            //     context,
-            //     title: "Snaps Review",
-            //     imagePath: "assets/images/saved_snap.png",
-            //     textColor: AppColors.yellow,
-            //     backgroundColor: AppColors.red2,
-            //     onPressed: () {
-            //       dbController.changeLanguage('german');
-            //       Get.to(StoriesListPage());
-            //     },
-            //   ),
+              _buildLanguageCard(
+                context,
+                title: "Snaps Review",
+                imagePath: "assets/images/saved_snap.png",
+                textColor: AppColors.yellow,
+                backgroundColor: AppColors.red2,
+                onPressed: () {
+                  dbController.changeLanguage('german');
+                  Get.to(StoriesListPage());
+                },
+              ),
             //   const SizedBox(height: 30),
             // // SizedBox(),
             // SizedBox(

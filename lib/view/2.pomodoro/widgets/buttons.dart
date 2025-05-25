@@ -12,38 +12,61 @@ class Buttons extends StatelessWidget {
     PomodoroController controller = Get.put(PomodoroController());
     return Positioned(
         bottom: 10,
-        child: Row(
+        child: Stack(
           children: [
-            SizedBox(width: context.width / 5),
+            // SizedBox(width: context.width / 5),
             SizedBox(
-              width: context.width / 2,
-              height: context.height / 15,
-              child: Obx(
-                ()=> ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:controller.status.value == PomodoroStatus.started
-                       ?AppColors.red4
-                       :AppColors.green,
-                      shadowColor: Colors.black,
-                      shape: const RoundedRectangleBorder(),
-                    ),
-                   onPressed: controller.status.value == PomodoroStatus.started
-                    ? controller.reset
-                    : controller.start,
-                child: Icon(controller.status.value == PomodoroStatus.started
-                    ? Icons.undo
-                    : Icons.play_arrow),),
-              )
-            
+              width: context.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: context.width / 1.7,
+                      height: context.height / 15,
+                      child: Obx(
+                        () => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                controller.status.value == PomodoroStatus.started
+                                    ? AppColors.red3
+                                    : const Color.fromARGB(255, 64, 174, 84),
+                            shadowColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          onPressed:
+                              controller.status.value == PomodoroStatus.started
+                                  ? controller.reset
+                                  : controller.start,
+                          child: Icon(
+                              controller.status.value == PomodoroStatus.started
+                                  ? Icons.undo
+                                  : Icons.play_arrow),
+                        ),
+                      )),
+                ],
+              ),
             ),
+            // SizedBox(
+            //   width: context.width / 10,
+            // ),
             SizedBox(
-              width: context.width / 10,
-            ),
-            IconButton(
-                onPressed: () {
-                  Get.to(SettingsPage());
-                },
-                icon: const Icon(Icons.settings))
+              width: context.width,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                      width: context.width / 10,
+                      ),
+                  IconButton(
+                      onPressed: () {
+                        Get.to(SettingsPage());
+                      },
+                      icon: const Icon(Icons.settings)),
+                ],
+              ),
+            )
           ],
         ));
   }

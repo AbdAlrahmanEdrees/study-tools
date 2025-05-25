@@ -12,7 +12,8 @@ import 'package:studytools/view/1.review/widgets/2.quiz_statistics_page.dart';
 //and later we added the german-english words and quizzes
 class QuizController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  DbController dbController = Get.put(DbController());
+  // DbController dbController = Get.put(DbController());
+  DbController dbController = Get.find<DbController>();
   Timer? timer;
   // bool _flag = true; // for mutual exclusion
   // int timerDuration = 3;

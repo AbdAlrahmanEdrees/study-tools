@@ -16,9 +16,9 @@ class PomodoroPage extends StatelessWidget {
     PomodoroController pomodoroController = Get.put(PomodoroController());
     DbController dbController = Get.put(DbController());
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 2, color: AppColors.yellow),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(width: 1, color: AppColors.yellow),
+      // ),
       child: Stack(
         alignment: Alignment.topCenter,
         children: [

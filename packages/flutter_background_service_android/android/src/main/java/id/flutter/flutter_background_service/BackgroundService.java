@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.FlutterEngineCache;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.plugin.common.JSONMethodCodec;
@@ -209,6 +210,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
             isRunning.set(true);
             backgroundEngine = new FlutterEngine(this);
+            FlutterEngineCache.getInstance().put("background_engine_id", backgroundEngine);
 
             // remove FlutterBackgroundServicePlugin (because its only for UI)
             backgroundEngine.getPlugins().remove(FlutterBackgroundServicePlugin.class);

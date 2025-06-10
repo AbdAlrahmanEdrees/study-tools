@@ -61,6 +61,8 @@ void onStart(ServiceInstance service) async {
   });
 
   Timer.periodic(const Duration(seconds: 2), (timer) async {
+    // print(sharingIntentController.sharedFiles);
+    // print(sharingIntentController.sharedText);
     if (service is AndroidServiceInstance) {
       //if you don't' assign constum notification, comment this
       service.setForegroundNotificationInfo(

@@ -37,7 +37,7 @@ class QuizController extends GetxController
     AppColors.secondColor,
     AppColors.secondColor
   ].obs;
-  late List<Map> dbWords;
+  RxList<Map> dbWords = <Map>[].obs;
   RxList<String> enShown =
       ["", "", "", "", ""].obs; //the words that will be shown
   RxList arShown = ["", "", "", "", ""].obs; //after the animation
@@ -74,14 +74,13 @@ class QuizController extends GetxController
   RxInt correct = 0.obs;
   RxInt wrong = 0.obs;
   RxInt streak = 0.obs;
-  late int highestStreak;
   ///////////////////////////////////////////
+  ///           Critical Section          ///
+  bool criticalSectionAvailable = true;
 
   @override
   void onInit() {
     dbWords = dbController.words;
-    highestStreak =
-        dbController.statistics[0]['highest_correct_answers_streak'];
     initButtons();
     firstFiveInite();
     // if (dbWords.length < 5) {
@@ -108,16 +107,18 @@ class QuizController extends GetxController
   }
 
   void initButtons() {
+    // print("$enButtonsVisibility \n");
     for (int i = enAvailable.length;
         i > 0;
         // && indx < dbWords.length;
-        indx++,
+        // indx++,
         i--) {
       arAvailable.shuffle();
       enAvailable.shuffle();
       if (indx < dbWords.length) {
         _enWords[enAvailable[0]] = dbWords[indx]['word'];
         _arWords[arAvailable[0]] = dbWords[indx]['translation'];
+        indx++;
         // enColors[enAvailable[0]] = AppColors.secondColor;
         // arColors[arAvailable[0]] = AppColors.secondColor;
         // enButtonsVisibility[enAvailable[0]] = true;
@@ -129,6 +130,26 @@ class QuizController extends GetxController
       }
       arAvailable.remove(arAvailable[0]);
       enAvailable.remove(enAvailable[0]);
+    }
+    // Temporal Solution
+    // I am not using the _countDown now.
+    // so I commented the if(_countDown==0) down below
+    // if the word on the button is "" the button will be invisible
+    // if all of the buttons are invisible, the quiz ends
+    //This is the solution I could figure for now to solve the bug.
+    // The bug is: in some quizzes, the last word in the quiz, the en word
+    // appears but the ar button' word is "", so the quiz deadlocks
+    if (indx == dbWords.length) {
+      if (arButtonsVisibility.every((e) => !e)) {
+        // print("quiz ended because all buttons are invisible");
+        if (streak.value >
+            dbController.statistics[0]['highest_correct_answers_streak']) {
+          dbController.editHighestStreak(streak.value);
+          print("new H S added\n\n");
+        }
+        quizPage = const QuizStatisticsPage();
+        update();
+      }
     }
   }
 
@@ -196,7 +217,6 @@ class QuizController extends GetxController
       correct.value++;
       streak.value++;
       coolDownTrue(enChoice, arChoice);
-      // initButtons();
     } else {
       enColors[enChoice] = Colors.red;
       arColors[arChoice] = Colors.red;
@@ -214,13 +234,13 @@ class QuizController extends GetxController
       enButtonsVisibility[en] = false;
       arButtonsVisibility[ar] = false;
       Future.delayed(const Duration(seconds: 2), () {
-        print(enShown[en]);
-        print(_enWords[en]);
+        // print(enShown[en]);
+        // print(_enWords[en]);
         // while (enShown[en] == _enWords[en]) {
         //   //wait until the timer refreshes the _enWords and _arWords
         //   print("s");
         // }
-        if (_enWords[en] != "") {
+        if (_enWords[en] != "" && _arWords[ar] != "") {
           enShown[en] = _enWords[en];
           arShown[ar] = _arWords[ar];
           enButtonsVisibility[en] = true;
@@ -229,20 +249,19 @@ class QuizController extends GetxController
           arColors[ar] = AppColors.secondColor;
         } else if (indx >= dbWords.length) {
           _countDown--;
-          print("\n\nyes $_countDown\n\n");
-          if (_countDown == 0) {
-            if (streak.value > highestStreak) {
-              dbController.editHighestStreak(streak.value);
-              highestStreak = streak.value;
-              print("new H S added\n\n");
-            }
-            quizPage = const QuizStatisticsPage();
-            update();
-          }
+          // print("\n\nyes $_countDown\n\n");
+          // if (_countDown == 0) {
+          //   if (streak.value >
+          //       dbController.statistics[0]['highest_correct_answers_streak']) {
+          //     dbController.editHighestStreak(streak.value);
+          //     print("new H S added\n\n");
+          //   }
+          //   quizPage = const QuizStatisticsPage();
+          //   update();
+          // }
         }
       });
     });
-    // initButtons();
   }
 
   void coolDownFalse(int en, int ar) async {
@@ -254,8 +273,14 @@ class QuizController extends GetxController
 
   @override
   void onClose() {
-    // animationController.dispose();
-    print("\ncontroller closed\n\n");
+    // prevent potential memory leaks, and refreshing the db.
+    timer?.cancel();
+    dbController.selectWords();
+    enColors.close();
+    arColors.close();
+    enButtonsVisibility.close();
+    arButtonsVisibility.close();
+    print("\nQuizController has been closed\n and timer is canceled\n");
     super.onClose();
   }
 
@@ -278,11 +303,15 @@ class QuizController extends GetxController
                       MaterialButton(
                         color: Theme.of(context).primaryColor,
                         onPressed: () {
-                          // onClose();
-                          dbController.selectWords();
                           Get.back();
                           Get.back();
-                          // Get.to(StatsPage);
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            //We will delete the controller (this stops the periodic timer, and
+                            // the next QuizController will be created inside the build of the QuizPage, so a new
+                            // quiz will be generated, the refreshQuiz function was a bad idea)
+                            Get.delete<QuizController>(force: true);
+                          });
+                          //Each time we get out of the quiz page, onClose() will be called
                         },
                         child: const Text("Yes"),
                       ),

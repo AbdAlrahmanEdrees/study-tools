@@ -35,7 +35,7 @@ class QuizStatisticsPage extends GetView<QuizController> {
           width: 200,
           child: Center(
             child: Text(
-              "Highest Streak: ${controller.highestStreak}",
+              "Highest Streak: ${controller.dbController.statistics[0]['highest_correct_answers_streak']}",
               style: const TextStyle(fontSize: 25, color: AppColors.dark),
             ),
           ),

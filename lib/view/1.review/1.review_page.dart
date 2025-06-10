@@ -4,6 +4,7 @@ import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/control/1.homecontroller.dart';
 import 'package:studytools/model/appcolors.dart';
 import 'package:studytools/view/1.review/2.stories_list_page.dart';
+import 'package:studytools/view/1.review/7.receive_intent_page.dart';
 
 class ReviewPage extends GetView<HomeController> {
   const ReviewPage({super.key});
@@ -105,7 +106,7 @@ class ReviewPage extends GetView<HomeController> {
               height: context.height / 20,
               child: ElevatedButton(
                 onPressed: () {
-                  //Get.to(ReceiveSharingIntentPage());
+                  Get.to(ReceiveSharingIntentPage());
                 },
                 style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.grey),

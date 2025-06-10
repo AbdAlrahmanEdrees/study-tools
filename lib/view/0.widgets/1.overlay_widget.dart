@@ -3,14 +3,24 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 
 import 'package:studytools/control/3.monitoring/4.overlay_window_controller.dart';
-import 'package:studytools/view/0.widgets/2.home_page_drawer.dart';
 import 'package:studytools/view/1.review/6.quiz_page.dart';
+import 'package:studytools/view/1.review/7.receive_intent_page.dart';
 
-class OverlayWindow extends StatelessWidget {
+class OverlayWindow extends GetView<OverlayWindowController> {
   OverlayWindow({super.key});
-  final OverlayWindowController controller =
-      Get.put(OverlayWindowController(), permanent: true);
+  // final OverlayWindowController controller =
+  //     Get.put(OverlayWindowController(), permanent: true);
 
+  // we will do a dynamic pages changer, like we did in 'homepage.dart'
+  final List<Widget> pages = [
+    nothing(),
+    QuizPage(
+      backButtonVisibility: false,
+    ),
+    ReceiveSharingIntentPage(),
+    //Translating_Widget_Page(),
+    //Reviewer(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +32,7 @@ class OverlayWindow extends StatelessWidget {
         child: Column(
           children: [
             Obx(() => SizedBox(
-                height: 10,
+                height: 15,
                 child: controller.animationIsRunning.value
                     ? AnimatedBuilder(
                         animation: controller.animation,
@@ -40,24 +50,44 @@ class OverlayWindow extends StatelessWidget {
                           Expanded(child: SizedBox()),
                           IconButton(
                             onPressed: () async {
-                              await FlutterOverlayWindow.closeOverlay();
-                              controller.animationIsRunning.value = true;
+                              print("closing overlay window");
+                              controller.closingOverlay();
                             },
                             icon: const Icon(Icons.close),
                           ),
+                          SizedBox(
+                            width: 20,
+                          ),
                         ],
                       ))),
+            SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
               onPressed: () async {
-                await FlutterOverlayWindow.closeOverlay();
-                controller.animationIsRunning.value = true;
+                // Get.find<QuizController>().onClose();
+                print('resetting');
+                await FlutterOverlayWindow.shareData('reset_animation');
               },
-              child: const Text("Close Overlay"),
+              child: const Text("Refresh quiz"),
             ),
-            // QuizPage(),
+            ElevatedButton(
+              onPressed: () async {
+                controller.randomIndex();
+                print(Get.find<OverlayWindowController>().index.value);
+              },
+              child: const Text("Change window"),
+            ),
+            Obx(() => pages[controller.index.value]),
           ],
         ),
       ),
     );
   }
+}
+
+Widget nothing() {
+  print(Get.find<OverlayWindowController>().index.value);
+  return Obx(
+      () => Text("Hello  ${Get.find<OverlayWindowController>().index.value}"));
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/control/2.pomodoro/1.pomodoro_controller.dart';
-import 'package:studytools/model/appcolors.dart';
 import 'package:studytools/view/2.pomodoro/widgets/buttons.dart';
 import 'package:studytools/view/2.pomodoro/widgets/clock_cap.dart';
 import 'package:studytools/view/2.pomodoro/widgets/main_body.dart';

@@ -47,94 +47,97 @@ class QuizButtonsPage extends GetView<QuizController> {
         } else {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: 5,
-                    padding: const EdgeInsets.symmetric(vertical: 50),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 40),
-                    itemBuilder: (context, index) {
-                      return Obx(() => AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            child: controller.enButtonsVisibility[index]
-                                ? ElevatedButton(
-                                    key: const ValueKey<int>(1),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          controller.enColors[index],
-                                      minimumSize: const Size(180, 60),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height*0.7,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: 5,
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 40),
+                      itemBuilder: (context, index) {
+                        return Obx(() => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 500),
+                              child: controller.enButtonsVisibility[index]
+                                  ? ElevatedButton(
+                                      key: const ValueKey<int>(1),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            controller.enColors[index],
+                                        minimumSize: const Size(180, 60),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        elevation: 5,
                                       ),
-                                      elevation: 5,
-                                    ),
-                                    onPressed: () {
-                                      controller.chooseEng(index);
-                                    },
-                                    child: Text(
-                                      ' ${controller.enShown[index]} ',
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
+                                      onPressed: () {
+                                        controller.chooseEng(index);
+                                      },
+                                      child: Text(
+                                        ' ${controller.enShown[index]} ',
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                    )
+                                  : const SizedBox(
+                                      key: ValueKey<int>(2),
+                                      height: 60,
+                                      width: 180,
                                     ),
-                                  )
-                                : const SizedBox(
-                                    key: ValueKey<int>(2),
-                                    height: 60,
-                                    width: 180,
-                                  ),
-                          ));
-                    },
+                            ));
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 40),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: 5,
-                    padding: const EdgeInsets.symmetric(vertical: 50),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 40),
-                    itemBuilder: (context, index) {
-                      return Obx(() => AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            child: controller.arButtonsVisibility[index]
-                                ? ElevatedButton(
-                                    key: const ValueKey<int>(1),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          controller.arColors[index],
-                                      minimumSize: const Size(180, 60),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+                  const SizedBox(width: 40),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: 5,
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 40),
+                      itemBuilder: (context, index) {
+                        return Obx(() => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 500),
+                              child: controller.arButtonsVisibility[index]
+                                  ? ElevatedButton(
+                                      key: const ValueKey<int>(1),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            controller.arColors[index],
+                                        minimumSize: const Size(180, 60),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        elevation: 5,
                                       ),
-                                      elevation: 5,
-                                    ),
-                                    onPressed: () {
-                                      controller.chooseAr(index);
-                                    },
-                                    child: Text(
-                                      ' ${controller.arShown[index]} ',
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
+                                      onPressed: () {
+                                        controller.chooseAr(index);
+                                      },
+                                      child: Text(
+                                        ' ${controller.arShown[index]} ',
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                    )
+                                  : const SizedBox(
+                                      key: ValueKey<int>(2),
+                                      height: 60,
+                                      width: 180,
                                     ),
-                                  )
-                                : const SizedBox(
-                                    key: ValueKey<int>(2),
-                                    height: 60,
-                                    width: 180,
-                                  ),
-                          ));
-                    },
+                            ));
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }

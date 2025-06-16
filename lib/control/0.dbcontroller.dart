@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:studytools/model/sqldb.dart';
-  import 'dart:io';
+import 'dart:io';
 
 class DbController extends GetxController {
   SqlDb db = SqlDb();
@@ -27,6 +27,18 @@ class DbController extends GetxController {
   // we will only use it to set the ringing and ticking volumes
   //for ringPlayer and tickPlayer
   // final AudioController _audioController = Get.put(AudioController());
+
+  ///////////////SNAPS////////////////////////////
+  // there is a metric called "Unix timestamp" which means: (seconds since 1-1-1970)
+  // so if we will calculate the DateTime now in this metric, it will be the number of seconds
+  // passed since 1970 until now.
+  // We will store the dates in our database as a "Unix timestamp".
+  int oneDaySeconds = 24 * 60 * 3600;
+  int threeDaysSeconds = 24 * 3 * 60 * 3600;
+  int oneWeekSeconds = 24 * 7 * 60 * 3600;
+  int oneMonthSeconds = 24 * 30 * 60 * 3600;
+  RxList<Map> snaps = <Map>[].obs;
+  RxList<Map> toReviewTodaySnaps = <Map>[].obs;
   @override
   void onInit() {
     super.onInit();
@@ -38,6 +50,7 @@ class DbController extends GetxController {
     selectTasks();
     selectStatistics();
     selectMonitoredApps();
+    selectSnaps();
   }
 
   void changeLanguage(String newLanguage) {
@@ -330,6 +343,7 @@ class DbController extends GetxController {
     List<Map> response = await db.select('''SELECT * FROM monitored_apps''');
     monitoredApps.value = response;
   }
+
   Future<void> deleteMonitoredApp(String packageName) async {
     await db.delete('''DELETE FROM monitored_apps
     WHERE package_name='$packageName'
@@ -338,25 +352,22 @@ class DbController extends GetxController {
   }
 
   Future<void> addMonitoredApp(String packageName) async {
-    await db.insert(
-        '''INSERT INTO monitored_apps (package_name)
+    await db.insert('''INSERT INTO monitored_apps (package_name)
     values('$packageName')''');
     selectMonitoredApps();
   }
 
-
   ///////////////////////////// Files DB ////////////////////////////////
 
-Future<void> deleteFile(String filePath) async {
-  final file = File(filePath);
+  Future<void> deleteFile(String filePath) async {
+    final file = File(filePath);
 
-  if (await file.exists()) {
-    await file.delete();
-    print('File deleted successfully.');
-  } else {
-    print('File does not exist.');
-  }
-
+    if (await file.exists()) {
+      await file.delete();
+      print('File deleted successfully.');
+    } else {
+      print('File does not exist.');
+    }
 
 //   try {
 //   final file = File(filePath);
@@ -370,6 +381,69 @@ Future<void> deleteFile(String filePath) async {
 //   print('Error deleting file: $e');
 // }
 // ALSO ask the user if he really wants to
-}
+  }
+  ////////////////////////////////////////////////////  SNAPS //////////////////////////////////////////
 
+  Future<void> selectSnaps() async {
+    List<Map> response = await db.select('''SELECT * FROM snaps
+    ORDER BY no_of_reviews ASC'''); // words will be sorted from the least reviewd to the most
+    snaps.value = response;
+  }
+
+  Future<void> addSnap(String snap, String type) async {
+    var now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    // int nextReviewDate = now + oneDaySeconds;
+    await db.insert(
+        '''INSERT INTO snaps (no_of_reviews, last_review_date, next_review_date, type, snap)
+    values(0,'not reviewd yet',$now,'$type','$snap')''');
+    Get.back();
+    selectSnaps();
+    await db.update('''UPDATE statistics
+    SET no_of_snaps_added=no_of_snaps_added + 1,
+        no_of_curr_snaps=no_of_curr_snaps + 1
+    WHERE id=0''');
+    selectStatistics();
+  }
+
+  // This function will be called in the onInit() function of the snapsScrollingControlling
+  Future<void> updateToReviewTodaySnaps() async {
+    // await selectSnaps();
+    int now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    toReviewTodaySnaps.clear();
+    for (var snap in snaps) {
+      if (now > snap['next_review_date']) {
+        toReviewTodaySnaps.add(snap);
+      }
+    }
+  }
+
+  Future<void> deleteSnap(int id) async {
+    await db.delete('''
+      DELETE FROM snaps
+      WHERE id=$id
+''');
+    selectSnaps();
+    await db.update('''
+      UPDATE statistics
+      SET no_of_curr_snaps=no_of_curr_snaps - 1
+      WHERE id=0
+''');
+    selectStatistics();
+  }
+
+  Future<void> reviewSnap(int id, int nextReviewDateInSeconds) async {
+    await db.update('''
+      UPDATE snaps
+      SET next_review_date=$nextReviewDateInSeconds
+      WHERE id=$id
+''');
+  }
+  
+  Future<void> updateNoteSnap(int id, String newNoteSnapForm) async {
+    await db.update('''
+      UPDATE snaps
+      SET snap='$newNoteSnapForm'
+      WHERE id=$id
+''');
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 
@@ -26,7 +27,7 @@ Future<void> initializeBackGroundService() async {
       androidConfiguration: AndroidConfiguration(
         onStart: onStart,
         isForegroundMode: true,
-        autoStartOnBoot: true,
+        autoStartOnBoot: false,
       ));
 
   service.startService();
@@ -37,6 +38,8 @@ void onStart(ServiceInstance service) async {
 //We will be setting up listerns over here to talk to the Native Android side.
   // Make the service background/foreground and start/stop the service.
   DartPluginRegistrant.ensureInitialized(); // Needed to access plugins
+  // only the main isolate needs firebase
+  // await Firebase.initializeApp();
   DbController dbController = Get.put(DbController(), permanent: true);
   ReceiveSharingIntentController sharingIntentController =
       Get.put(ReceiveSharingIntentController(), permanent: true);

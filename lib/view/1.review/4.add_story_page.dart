@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/model/appcolors.dart';
-import 'package:flutter/services.dart';
 
 class AddStoryPage extends StatelessWidget {
   final String title, text, action;
@@ -79,6 +78,15 @@ class AddStoryPage extends StatelessWidget {
                         colors: [
                           Color(0xFF800000), // Burgundy
                           Color(0xFF9B111E), // Wine Red
+                          Color.fromARGB(255, 160, 30, 43), // Wf
+                          Color.fromARGB(255, 160, 30, 43), // Wf
+                          Color.fromARGB(255, 158, 44, 55), // Wff
+                          Color.fromARGB(255, 158, 44, 55), // Wff
+                          Color.fromARGB(255, 158, 44, 55), // Wff
+                          Color.fromARGB(255, 159, 43, 54), // Wff
+                          Color.fromARGB(255, 160, 30, 43), // Wf
+                          Color.fromARGB(255, 150, 31, 43), // Wf
+                          Color(0xFF9B111E), // Wine Red
                           Color(0xFF800020) // Dark Burgundy
                         ],
                         begin: Alignment.bottomLeft,
@@ -133,10 +141,10 @@ class AddStoryPage extends StatelessWidget {
                           style: const TextStyle(
                               color: Color.fromARGB(221, 255, 255, 255),
                               fontWeight: FontWeight.bold),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(
-                                r'''[0-9a-zA-Z!@#$%^&*(),.?"'+:{}|<>_+~`=;\[\] \-\\/ ]+''')),
-                          ],
+                          // inputFormatters: [
+                          //   FilteringTextInputFormatter.allow(RegExp(
+                          //       r'''[0-9a-zA-Z!@#$%^&*(),.?"'+:{}|<>_+~`=;\[\] \-\\/ ]+''')),
+                          // ],
                         ),
                       ],
                     ),
@@ -146,10 +154,18 @@ class AddStoryPage extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     if (action == "add") {
-                      controller.addStory(controller1.text, controller2.text);
+                      controller.addStory(
+                          controller1.text.replaceAll(
+                              RegExp(r'''[^a-zA-Z0-9 '"\-&%!?+*^]'''), ''),
+                          controller2.text.replaceAll(
+                              RegExp(r'''[^a-zA-Z0-9 '"\-&%!?+*^]'''), ''));
                     } else {
                       controller.editStory(
-                          controller1.text, controller2.text, id);
+                          controller1.text.replaceAll(
+                              RegExp(r'''[^a-zA-Z0-9 '"\-&%!?+*^]'''), ''),
+                          controller2.text.replaceAll(
+                              RegExp(r'''[^a-zA-Z0-9 '"\-&%!?+*^]'''), ''),
+                          id);
                     }
                   },
                   icon: Icon(action == "add" ? Icons.add : Icons.edit),

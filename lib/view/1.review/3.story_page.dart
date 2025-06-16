@@ -33,6 +33,7 @@ class StoryPage extends StatelessWidget {
     }
 
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -57,6 +58,7 @@ class StoryPage extends StatelessWidget {
         ),
       ),
       body: Container(
+        width: screenWidth,
         height: screenHeight,
         decoration: BoxDecoration(
           gradient: LinearGradient(

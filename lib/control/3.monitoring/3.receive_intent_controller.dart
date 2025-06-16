@@ -1,24 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class ReceiveSharingIntentController extends GetxController {
-  List<SharedMediaFile> sharedFiles = <SharedMediaFile>[];
-  String sharedText = '';
+  List<Map<String, String>> sharedFiles = [{}];
+  Map sharedText = {};
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-
     // Set up method channel
     const methodChannel = MethodChannel('receive_share_intent');
     methodChannel.setMethodCallHandler((call) async {
-      FlutterOverlayWindow.shareData(2);
       if (call.method == 'onShareReceived') {
         final data = call.arguments as Map<dynamic, dynamic>;
         final type = data['type'] as String?;
@@ -26,83 +18,96 @@ class ReceiveSharingIntentController extends GetxController {
         final paths = data['paths'] as List<dynamic>?;
 
         if (type == 'media') {
+          sharedText.clear();
+          sharedFiles.clear();
           if (path != null) {
             // Single file share
-            final sharedFile = SharedMediaFile(
-              path: path,
-              type: _detectMediaType(path),
-            );
-            sharedFiles.clear();
+            final sharedFile = {
+              'path': path,
+              'type': _detectMediaType(path),
+            };
             sharedFiles.add(sharedFile);
-            print(sharedFiles.map((f) => f.toMap()));
+            //Overlay Window runs in an isolate (doesn't share memory with other threads),
+            // so we talk to it throw messages like this:
+            FlutterOverlayWindow.shareData(sharedFiles);
           } else if (paths != null) {
             // Multiple files share
             final sharedFilesList = paths
-                .map((p) => SharedMediaFile(
-                      path: p.toString(),
-                      type: path!=null ?_detectMediaType(path) : SharedMediaType.file,
-                    ))
+                .map((p) => {
+                      'path': p != null ? p.toString() : '',
+                      'type': p != null ? _detectMediaType(p.toString()) : '',
+                    })
                 .toList();
-            sharedFiles.clear();
-            sharedFiles.addAll(sharedFilesList);
+            sharedFiles = sharedFilesList;
+            // dart isolates can only share messages of raw (native) data
+            // Lists like <ShareMediaFile>[] can not be shared, sharing it will crash the program!
             FlutterOverlayWindow.shareData(sharedFiles);
           }
         } else if (type == 'text') {
-          sharedText = data['text'] as String? ?? '';
+          sharedFiles.clear();
+          sharedText = {
+            'path': data['text'] as String,
+            'type': _detectText(data['text'] as String)
+          };
           FlutterOverlayWindow.shareData(sharedText);
         }
         await FlutterOverlayWindow.showOverlay(
             alignment: OverlayAlignment.topCenter,
             overlayTitle: "Overlay",
             overlayContent: "Monitoring App",
+            // height: 400,
+            // width: 400,
             //enableDrag: true,
             flag: OverlayFlag.focusPointer);
-        //Overlay Window runs in an isolate (doesn't share memory with other threads),
-        // so we talk to it throw messages like this:
-        await FlutterOverlayWindow.shareData('reset_animation');
       }
     });
   }
 
-  SharedMediaType _detectMediaType(String path) {
-  final lower = path.toLowerCase();
+  String _detectMediaType(String path) {
+    final lower = path.toLowerCase();
 
-  // URL detection first
-  if (lower.startsWith('http://') || lower.startsWith('https://')) {
-    return SharedMediaType.url; // URL is typically treated as text (you can also define your own enum for URL if needed)
+    // Image
+    if (lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.png') ||
+        lower.endsWith('.gif') ||
+        lower.endsWith('.bmp') ||
+        lower.endsWith('.webp')) {
+      return 'image';
+    }
+
+    // Video
+    if (lower.endsWith('.mp4') ||
+        lower.endsWith('.avi') ||
+        lower.endsWith('.mov') ||
+        lower.endsWith('.mkv') ||
+        lower.endsWith('.webm')) {
+      return 'video';
+    }
+
+    // Audio
+    if (lower.endsWith('.mp3') ||
+        lower.endsWith('.wav') ||
+        lower.endsWith('.aac') ||
+        lower.endsWith('.ogg') ||
+        lower.endsWith('.flac')) {
+      return 'audio';
+    }
+
+    // Fallback to not-included
+    return 'not-included';
   }
 
-  // Image
-  if (lower.endsWith('.jpg') ||
-      lower.endsWith('.jpeg') ||
-      lower.endsWith('.png') ||
-      lower.endsWith('.gif') ||
-      lower.endsWith('.bmp') ||
-      lower.endsWith('.webp')) {
-    return SharedMediaType.image;
-  }
+  _detectText(String text) {
+    final lower = text.toLowerCase();
 
-  // Video
-  if (lower.endsWith('.mp4') ||
-      lower.endsWith('.avi') ||
-      lower.endsWith('.mov') ||
-      lower.endsWith('.mkv') ||
-      lower.endsWith('.webm')) {
-    return SharedMediaType.video;
+    // URL detection first
+    if (lower.startsWith('http://') || lower.startsWith('https://')) {
+      return 'url'; // URL is typically treated as text (you can also define your own enum for URL if needed)
+    } else {
+      return 'text';
+    }
   }
-
-  // Audio
-  if (lower.endsWith('.mp3') ||
-      lower.endsWith('.wav') ||
-      lower.endsWith('.aac') ||
-      lower.endsWith('.ogg') ||
-      lower.endsWith('.flac')) {
-    return SharedMediaType.file;
-  }
-
-  // Fallback to file
-  return SharedMediaType.file;
-}
 
   // @override
   // void onClose() {

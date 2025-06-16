@@ -1,7 +1,7 @@
 // Add the buildscript block at the top if it's not already here
 buildscript {
         // If you're using Kotlin, you might have a version defined here
-        ext.kotlin_version = '1.8.10'
+        ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
@@ -11,9 +11,11 @@ buildscript {
         // classpath 'com.android.tools.build:gradle:8.2.0'
 
         // flutter_background_service requires version 7.4.2
-        classpath "com.android.tools.build:gradle:7.4.2"
+        // classpath "com.android.tools.build:gradle:7.4.2"
         // If your project uses Kotlin, include the Kotlin Gradle plugin as well:
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 

@@ -1,0 +1,2 @@
+D:/10VE/lectures/year 5/term 2/projects/1- Graduation Project/1.app/studytools/android/app/.cxx/Debug/2ud6c2j2/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/10VE/lectures/year 5/term 2/projects/1- Graduation Project/1.app/studytools/android/app/.cxx/Debug/2ud6c2j2/armeabi-v7a/CMakeFiles/rebuild_cache.dir

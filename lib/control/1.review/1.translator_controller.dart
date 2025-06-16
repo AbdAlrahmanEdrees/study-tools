@@ -161,7 +161,7 @@ class TranslationController extends GetxController {
   }
 
   void translationCard(BuildContext context, String word, int storyId) {
-    word = word.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+    word = word.replaceAll(RegExp(r'[^a-zA-Z\-]'), '');
     controller1.text = word;
     translateText();
     showDialog(
@@ -266,7 +266,7 @@ class TranslationController extends GetxController {
     List<TextSpan> spans = [];
     text.split(' ').forEach((word) {
       spans.add(TextSpan(
-          text: ' $word ',
+          text: '$word ',
           style: const TextStyle(color: AppColors.dark, fontSize: 16),
           recognizer:
               DoubleTapGestureRecognizer() //ther is a TapGestureRecognizer "..onTap=(){}"

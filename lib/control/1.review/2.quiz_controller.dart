@@ -64,7 +64,7 @@ class QuizController extends GetxController
   //the quiz left/right slots that still
   List<int> arAvailable = [0, 1, 2, 3, 4]; //have no word assigned to it or
   //gussed correctly
-  int _countDown = 5;
+  // int _countDown = 5;
   Widget quizPage = const QuizButtonsPage();
   // late AnimationController animationController;
   // late Animation<Color?> animation;
@@ -248,7 +248,7 @@ class QuizController extends GetxController
           enColors[en] = AppColors.secondColor;
           arColors[ar] = AppColors.secondColor;
         } else if (indx >= dbWords.length) {
-          _countDown--;
+          // _countDown--;
           // print("\n\nyes $_countDown\n\n");
           // if (_countDown == 0) {
           //   if (streak.value >

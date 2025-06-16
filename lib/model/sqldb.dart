@@ -68,18 +68,21 @@ class SqlDb {
       task_state INTEGER NOT NULL DEFAULT 0,
       working_on_task_indicator INTEGER DEFAULT 0
     )
-  ''');
+  ''');  
     await db.execute('''
       CREATE TABLE statistics (
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
       no_of_curr_not_achieved_tasks INTEGER,
       no_of_curr_stories INTEGER,
       no_of_curr_words INTEGER,
+      no_of_curr_snaps INTEGER,
       highest_correct_answers_streak INTEGER,
       no_of_quizzes_taken INTEGER,
       no_of_achieved_tasks INTEGER,
+      no_of_learnt_snaps INTEGER,
       no_of_stories_added INTEGER,
       no_of_words_added INTEGER,
+      no_of_snaps_added INTEGER,
       no_of_achieved_pomodoro_stages INTEGER
     )
   ''');
@@ -92,18 +95,18 @@ class SqlDb {
       short_break_duration INTEGER,
       long_break_duration INTEGER,
       type_of_clock TEXT)''');
-      
+
     await db.execute('''
       CREATE TABLE monitored_apps(
       package_name TEXT)''');
 
-      
     await db.execute('''
       CREATE TABLE snaps(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       no_of_reviews INTEGER NOT NULL,
-      last_review_date DATE NOT NULL,
-      next_review_date DATE NOT NULL,
+      last_review_date TEXT NOT NULL,
+      next_review_date INTEGER NOT NULL,
+      type TEXT NOT NULL,
       snap TEXT NOT NULL)''');
 
     ///// add default rows:
@@ -114,7 +117,7 @@ class SqlDb {
  ''');
     await db.execute('''
     INSERT INTO statistics
-    values (0,0,2,0,0,0,0,2,0,0)
+    values (0,0,2,0,0,0,0,0,0,2,0,0,0)
  ''');
 
     await db.execute('''
@@ -176,14 +179,51 @@ Anna: Mein Tag w')
     //   CREATE TABLE monitored_apps(
     //   package_name TEXT)''');
     // await db.execute('''DROP TABLE monitored_apps''');
-     
+
     // await db.execute('''
     //   CREATE TABLE snaps(
     //   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     //   no_of_reviews INTEGER NOT NULL,
-    //   last_review_date DATE NOT NULL,
-    //   next_review_date DATE NOT NULL,
+    //   last_review_date INTEGER NOT NULL,
+    //   next_review_date INTEGER NOT NULL,
+    //   type TEXT NOT NULL,
     //   snap TEXT NOT NULL)''');
+
+    await db.execute("drop table statistics");
+    await db.execute("drop table snaps");
+
+    await db.execute('''
+      CREATE TABLE snaps(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      no_of_reviews INTEGER NOT NULL,
+      last_review_date TEXT NOT NULL,
+      next_review_date INTEGER NOT NULL,
+      type TEXT NOT NULL,
+      snap TEXT NOT NULL)''');
+    
+    await db.execute('''
+      CREATE TABLE statistics (
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+      no_of_curr_not_achieved_tasks INTEGER,
+      no_of_curr_stories INTEGER,
+      no_of_curr_words INTEGER,
+      no_of_curr_snaps INTEGER,
+      highest_correct_answers_streak INTEGER,
+      no_of_quizzes_taken INTEGER,
+      no_of_achieved_tasks INTEGER,
+      no_of_learnt_snaps INTEGER,
+      no_of_stories_added INTEGER,
+      no_of_words_added INTEGER,
+      no_of_snaps_added INTEGER,
+      no_of_achieved_pomodoro_stages INTEGER
+    )
+  ''');
+  
+    await db.execute('''
+    INSERT INTO statistics
+    values (0,0,2,0,0,0,0,0,0,0,0,0,0)
+ ''');
+
     print("======DB has been upgraded=======");
   }
 

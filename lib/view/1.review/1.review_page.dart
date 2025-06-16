@@ -4,7 +4,7 @@ import 'package:studytools/control/0.dbcontroller.dart';
 import 'package:studytools/control/1.homecontroller.dart';
 import 'package:studytools/model/appcolors.dart';
 import 'package:studytools/view/1.review/2.stories_list_page.dart';
-import 'package:studytools/view/1.review/7.receive_intent_page.dart';
+import 'package:studytools/view/1.review/snaps/1.snaps_scroller_page.dart';
 
 class ReviewPage extends GetView<HomeController> {
   const ReviewPage({super.key});
@@ -73,8 +73,7 @@ class ReviewPage extends GetView<HomeController> {
                 textColor: AppColors.yellow,
                 backgroundColor: AppColors.red2,
                 onPressed: () {
-                  dbController.changeLanguage('german');
-                  Get.to(StoriesListPage());
+                  Get.to(SnapsScrollerPage());
                 },
               ),
             //   const SizedBox(height: 30),
@@ -101,22 +100,23 @@ class ReviewPage extends GetView<HomeController> {
             //     ),
             //   ),
             // ),
-            SizedBox(
-              width: context.width / 1.1,
-              height: context.height / 20,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.to(ReceiveSharingIntentPage());
-                },
-                style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.grey),
-                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)))),
-                child: Text(
-                  "Receive sharing intent page",
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                ),
-              ),)
+            // SizedBox(
+            //   width: context.width / 1.1,
+            //   height: context.height / 20,
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       Get.to(ReceiveSharingIntentPage());
+            //     },
+            //     style: ButtonStyle(
+            //         backgroundColor: WidgetStatePropertyAll(Colors.grey),
+            //         shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(7)))),
+            //     child: Text(
+            //       "Receive sharing intent page",
+            //       style: TextStyle(fontSize: 18, color: Colors.black),
+            //     ),
+            //   ),
+            //   )
             ],
           ),
         ),

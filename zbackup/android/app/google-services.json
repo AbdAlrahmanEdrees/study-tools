@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163192998068",
+    "project_id": "studytools-8209a",
+    "storage_bucket": "studytools-8209a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163192998068:android:2fac36c263c003e4242fe1",
+        "android_client_info": {
+          "package_name": "com.example.studytools"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF5yAvuJ8mQDKCxNQqOVyd6SY8ZVVPMc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
